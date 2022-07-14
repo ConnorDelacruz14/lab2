@@ -1,0 +1,2 @@
+Number of files read: 4
+Number of lines read: 0
