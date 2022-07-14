@@ -3,7 +3,6 @@ import csv
 from sportclub import SportClub
 from typing import List, Tuple
 
-
 def readFile(csv_file: Path) -> List[Tuple[str, str, str]]:
     """Read a CSV file and return its content
         
@@ -15,11 +14,16 @@ def readFile(csv_file: Path) -> List[Tuple[str, str, str]]:
 
     with csv_file.open() as file:
         csv_reader = csv.reader(file)
+        good_file_lines = 0
         for i, row in enumerate(csv_reader):
             if len(row) == 4 and i > 0:
                 sport_club_content.append((row[0], row[1], row[2]))
+                good_file_lines += 1
             elif len(row) < 4:
-                raise ValueError    
+                good_file_lines = 0
+                raise ValueError
+                continue
+
     return sport_club_content
 
 
@@ -36,24 +40,28 @@ def readAllFiles() -> List[SportClub]:
     # TODO: Complete the function
     sport_clubs = []
     error_file_names = []
-    files_read = 0
-    lines_read = 0
+    good_files_read = 0
+    
+    global good_lines_read
+    good_lines_read = 0
+    
     file_path = Path("").glob('*.csv')
     for file_name in file_path:
         if file_name.name != "survey_database.csv":
+            #good file read
             try:
                 club_info = readFile(file_name)
                 new_club = SportClub(club_info[0], club_info[1], club_info[2], 0)
                 sport_clubs.append(new_club)
+                good_files_read += 1
+            #bad file read
             except:
                 error_file_names.append(file_name.name)
-            finally:
-                files_read += 1
 
     #Create report and error text files
     report = open('report.txt', 'w')
-    report.write(f'Number of files read: {files_read}\n')
-    report.write(f'Number of lines read: {lines_read}\n')
+    report.write(f'Number of files read: {good_files_read}\n')
+    report.write(f'Number of lines read: {good_lines_read}\n')
 
     error = open('error_log.txt', 'w')
     for name in error_file_names:
