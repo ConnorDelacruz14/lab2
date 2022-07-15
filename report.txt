@@ -1,2 +1,2 @@
 Number of files read: 2
-Number of lines read: 0
+Number of lines read: 14
