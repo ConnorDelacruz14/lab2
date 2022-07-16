@@ -112,12 +112,14 @@ class SportClub:
             
 
     def __lt__(self, o: object) -> bool:
-        if self.name == o.getName():
-            if self.count >= o.getCount():
-                return False
-            else:
+        # sortSport([SportClub("Houston", "Rockets", "NBA", 80), SportClub("LA", "Warriors", "NBA", 130), SportClub("LA", "Lakers", "NBA", 130)])
+        # rockets: 80, warriors 130 --> warriors, rockets
+        if self.count > o.getCount():
+            return True
+        elif self.name == o.getName():
+            if self.count < o.getCount():
                 return True
         elif self.name < o.getName():
-            return True
-        
-
+            if self.count == o.getCount():
+                return True
+        return False
