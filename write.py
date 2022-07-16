@@ -1,4 +1,5 @@
 import csv
+from os import sep
 from sportclub import SportClub
 from typing import List, Iterable
 
@@ -15,10 +16,11 @@ def separateSports(all_clubs: List[SportClub]) -> Iterable[List[SportClub]]:
         An iterable of lists of sportclubs that only contain clubs playing the same sport. 
     """
     # TODO: Complete the function
-    for sport in all_clubs:
-        pass
+    separated_sports = [[]]
+    
 
-    return [[]]
+
+    return separated_sports
 
 
 def sortSport(sport: List[SportClub]) -> List[SportClub]:
@@ -33,14 +35,8 @@ def sortSport(sport: List[SportClub]) -> List[SportClub]:
     Returns:
         A sorted list of the SportClubs  
     """
-    # TODO: Complete the function
-    # hint: check documentation for sorting lists 
-    # ( https://docs.python.org/3/library/functions.html#sorted , https://docs.python.org/3/howto/sorting.html#sortinghowto )
-    sorted_clubs = [] 
 
-    for club in sport:
-        pass
-   
+    sorted_clubs = sorted(sport)
     return sorted_clubs
 
 

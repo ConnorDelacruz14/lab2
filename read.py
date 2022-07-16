@@ -19,10 +19,8 @@ def readFile(csv_file: Path) -> List[Tuple[str, str, str]]:
                 sport_club_content.append((row[0], row[1], row[2]))
             elif len(row) < 4 or (len(row) < 4 and i == 1):
                 raise ValueError
-            else:
-                raise ValueError
                 continue
-            
+    
     return sport_club_content
 
 
@@ -44,8 +42,9 @@ def readAllFiles() -> List[SportClub]:
             #good file read
             try:
                 club_info = readFile(file_name)
-                new_club = SportClub(club_info[0], club_info[1], club_info[2], 0)
-                sport_clubs.append(new_club)
+                for club in club_info:
+                    new_club = SportClub(club[0], club[1], club[2], 0)
+                    sport_clubs.append(new_club)
                 good_files_read += 1
                 for team in club_info:
                     good_lines_read += 1
