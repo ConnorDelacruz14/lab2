@@ -1,3 +1,4 @@
+from enum import unique
 from pathlib import Path
 import csv
 from sportclub import SportClub
@@ -13,15 +14,21 @@ def readFile(csv_file: Path) -> List[Tuple[str, str, str]]:
     sport_club_content = []
 
     with csv_file.open() as file:
+        rows = 0
         csv_reader = csv.reader(file)
         for i, row in enumerate(csv_reader):
-            if len(row) == 4 and i > 0:
+            if len(row) >= 3 and i > 0:
+                rows += 1
                 sport_club_content.append((row[0], row[1], row[2]))
-            elif len(row) < 4 or (len(row) < 4 and i == 1):
+            if len(row) < 3:
                 raise ValueError
-                continue
-    
+            if row == "":
+                raise ValueError
+        if rows == 0:
+            raise ValueError
+
     return sport_club_content
+
 
 
 def readAllFiles() -> List[SportClub]:
@@ -36,21 +43,25 @@ def readAllFiles() -> List[SportClub]:
     good_files_read = 0
     good_lines_read = 0
 
-    file_path = Path("").glob('*.csv')
+    file_path = Path("./").glob("**/*.csv")
     for file_name in file_path:
         if file_name.name != "survey_database.csv":
             #good file read
             try:
                 club_info = readFile(file_name)
+
                 for club in club_info:
                     new_club = SportClub(club[0], club[1], club[2], 0)
-                    sport_clubs.append(new_club)
+                    sport_clubs.append(new_club) 
+                
                 good_files_read += 1
                 for team in club_info:
                     good_lines_read += 1
+
             #bad file read
-            except:
+            except ValueError:
                 error_file_names.append(file_name.name)
+
 
     #Create report and error text files
     report = open('report.txt', 'w')
@@ -63,5 +74,14 @@ def readAllFiles() -> List[SportClub]:
 
     report.close()
     error.close()
-    
-    return sport_clubs
+
+    # create copy list
+    copy_clubs = sport_clubs
+    # set of uniqe clubs 
+    unique_clubs = set(sport_clubs)
+    for club in unique_clubs:
+        for club2 in copy_clubs:
+            if club.__eq__(club2):
+                club.incrementCount()
+                
+    return list(unique_clubs)

@@ -15,9 +15,16 @@ def separateSports(all_clubs: List[SportClub]) -> Iterable[List[SportClub]]:
     Returns:
         An iterable of lists of sportclubs that only contain clubs playing the same sport. 
     """
-    # TODO: Complete the function
-    separated_sports = [[]]
+    sports = set([club.getSport() for club in all_clubs])
+    sports_dict = {}
+    for sport in sports:
+        sports_dict.update({sport: []})
 
+    for club in all_clubs:
+        if club.getSport() in sports_dict.keys():
+            sports_dict[club.getSport()].append(club)
+
+    separated_sports = [sport for sport in sports_dict.values()]
 
     return separated_sports
 
@@ -42,10 +49,15 @@ def outputSports(sorted_sports: Iterable[List[SportClub]]) -> None:
         sorted_sports: an Iterable of different sports, each already sorted correctly
     """
     # TODO: Complete the function
-    with open("survey_database.csv", "w") as survey_database:
+    with open("survey_database.csv", "w", newline="") as survey_database:
         csvwriter = csv.writer(survey_database)
         csvwriter.writerow(['City', 'Team Name', 'Sport', 'Number of Times Picked'])
-        #for sport in sorted_sports:
-            #for i in range(3):
-                #csvwriter.writerow([sport[i].getCity(), sport[i].getName(), sport[i]().getSport(), sport[i].getCount()])
-                
+        for sport in sorted_sports:
+            if len(sport) < 3:
+                top_rated = sport[:]
+                for team in top_rated:
+                    csvwriter.writerow([team.getCity(), team.getName(), team.getSport(), team.getCount()])
+            else:
+                top_rated = sport[:3]
+                for team in top_rated:
+                    csvwriter.writerow([team.getCity(), team.getName(), team.getSport(), team.getCount()])
